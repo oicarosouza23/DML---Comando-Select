@@ -1,0 +1,101 @@
+-- Criando as tabelas
+CREATE TABLE Funcionarios (
+    Código INT PRIMARY KEY,
+    PrimeiroNome VARCHAR(50),
+    SegundoNome VARCHAR(50),
+    UltimoNome VARCHAR(50),
+    DataNasci DATE,
+    CPF VARCHAR(14),
+    RG VARCHAR(20),
+    Endereço VARCHAR(100),
+    CEP VARCHAR(10),
+    Cidade VARCHAR(50),
+    Fone VARCHAR(20),
+    CodigoDepartamento INT,
+    Função VARCHAR(50),
+    Salario DECIMAL(10,2)
+);
+
+CREATE TABLE Departamentos (
+    Código INT PRIMARY KEY,
+    Nome VARCHAR(50),
+    Localização VARCHAR(100),
+    CodigoFuncionarioGerente INT
+);
+
+
+INSERT INTO Funcionarios (Código, PrimeiroNome, SegundoNome, UltimoNome, DataNasci, CPF, RG, Endereço, CEP, Cidade, Fone, CodigoDepartamento, Função, Salario) 
+VALUES
+(1, 'icaro', 'souza', 'silva', '2005-05-15', '123.456.789-01', '123456789', 'Rua A, 123', '12345-678', 'Recife', '(81) 98765-4321', 1, 'Gerente', 5000.00),
+(2, 'gabriela', 'Ferreira', 'Oliveira', '1999-09-15', '987.654.321-09', '987654321', 'Av. B, 456', '98765-432', 'São Paulo', '(11) 1234-5678', 1, 'Secretária', 2500.00),
+
+
+
+
+INSERT INTO Departamentos (Código, Nome, Localização, CodigoFuncionarioGerente) 
+VALUES
+(1, 'Administração', 'Prédio A', 1),
+(2, 'Vendas', 'Prédio B', 2);
+
+
+
+-- Exercício 1
+SELECT PrimeiroNome, UltimoNome FROM Funcionarios ORDER BY UltimoNome;
+
+-- Exercício 2
+SELECT * FROM Funcionarios ORDER BY Cidade;
+
+-- Exercício 3
+SELECT * FROM Funcionarios WHERE Salario > 1000.00 ORDER BY PrimeiroNome, UltimoNome;
+
+-- Exercício 4
+SELECT DataNasci, PrimeiroNome FROM Funcionarios ORDER BY DataNasci DESC;
+
+-- Exercício 5
+SELECT PrimeiroNome, SegundoNome, UltimoNome, Fone FROM Funcionarios;
+
+-- Exercício 6
+SELECT SUM(Salario) AS TOTAL FROM Funcionarios;
+
+-- Exercício 7
+SELECT f.PrimeiroNome, d.Nome AS NomeDepartamento, f.Função FROM Funcionarios f
+INNER JOIN Departamentos d ON f.CodigoDepartamento = d.Código;
+
+-- Exercício 8
+SELECT d.Nome AS NomeDepartamento, f.PrimeiroNome AS NomeGerente FROM Departamentos d
+INNER JOIN Funcionarios f ON d.CodigoFuncionarioGerente = f.Código;
+
+-- Exercício 9
+SELECT d.Nome AS NomeDepartamento, SUM(f.Salario) AS FolhaPagamento FROM Funcionarios f
+INNER JOIN Departamentos d ON f.CodigoDepartamento = d.Código
+GROUP BY d.Nome;
+
+-- Exercício 10
+SELECT d.Nome AS NomeDepartamento FROM Funcionarios f
+INNER JOIN Departamentos d ON f.CodigoDepartamento = d.Código
+WHERE f.Função = 'Supervisor';
+
+-- Exercício 11
+SELECT COUNT(*) AS QuantidadeFuncionarios FROM Funcionarios;
+
+-- Exercício 12
+SELECT AVG(Salario) AS SalarioMedio FROM Funcionarios;
+
+-- Exercício 13
+SELECT d.Nome AS NomeDepartamento, MIN(f.Salario) AS MenorSalario FROM Funcionarios f
+INNER JOIN Departamentos d ON f.CodigoDepartamento = d.Código
+GROUP BY d.Nome;
+
+-- Exercício 14
+SELECT PrimeiroNome, UltimoNome FROM Funcionarios WHERE SegundoNome IS NULL OR SegundoNome = '';
+
+-- Exercício 15
+SELECT d.Nome AS NomeDepartamento, f.PrimeiroNome, f.UltimoNome FROM Funcionarios f
+INNER JOIN Departamentos d ON f.CodigoDepartamento = d.Código
+ORDER BY d.Nome, f.PrimeiroNome, f.UltimoNome;
+
+-- Exercício 16
+SELECT PrimeiroNome FROM Funcionarios WHERE Cidade = 'Recife' AND Função = 'Telefonista';
+
+-- Exercício 17
+SELECT PrimeiroNome FROM Funcionarios WHERE CodigoDepartamento = (SELECT Codigo FROM Departamentos WHERE Nome = 'Pessoal');
